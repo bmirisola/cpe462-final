@@ -1,13 +1,14 @@
 import cv2
 import imutils
-#import os
+import os
 
-
+os.mkdir('data')
+cwd = os.getcwd()
 key = cv2. waitKey(1)
-image = cv2.imread("/Users/riyashrestha/cpe462-final/saved_img.jpg")
+image = cv2.imread("{}/saved_img.jpg".format(cwd))
 for i in range(0, 4):
     Rotated_image = imutils.rotate(image, i*45)
-    cv2.imwrite("f{}.jpeg".format(i), img=Rotated_image)
+    cv2.imwrite("{}/data/f{}.jpeg".format(cwd, i), img=Rotated_image)
 
 cv2.imshow("Rotated", Rotated_image)
 cv2.waitKey(0)
