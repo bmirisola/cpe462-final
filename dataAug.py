@@ -46,6 +46,7 @@ for j in range(0, 4):
     cv2.imwrite("{}/data/noise/sp{}.jpeg".format(cwd, j), img=add_noise(image))
 
 image = cv2.imread("{}/saved_img.jpg".format(cwd))
+
 # flip the img in 3 diff ways
 os.mkdir("data/flip")
 for f in range(-1, 2):
@@ -61,6 +62,7 @@ for s in range(1, 5):
     simage = cv2.resize(image, dsize)
     cv2.imwrite("{}/data/rsize/rs{}.jpeg".format(cwd, s), img=simage)
 
+# translating the img
 os.mkdir("data/translate")
 height, width = image.shape[:2]
 for t in range(1, 5):
@@ -68,3 +70,9 @@ for t in range(1, 5):
     T = np.float32([[1, 0, twidth], [0, 1, theight]])
     img_translation = cv2.warpAffine(image, T, (width, height))
     cv2.imwrite("{}/data/translate/T{}.jpeg".format(cwd, T), img=img_translation)
+
+# Cropping an image
+os.mkdir("data/crop")
+for c in range(1, 5):
+    cropped_image = image[100 * c : 200 * c, 20 * c : 300 * c]
+    cv2.imwrite("{}/data/crop/c{}.jpg".format(cwd, c), cropped_image)
