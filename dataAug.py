@@ -2,6 +2,8 @@ import cv2
 import imutils
 import random
 import os
+import numpy as np
+
 
 # making an overall data dir and getting to the main img
 os.mkdir("data")
@@ -58,3 +60,11 @@ for s in range(1, 5):
     dsize = (width, height)
     simage = cv2.resize(image, dsize)
     cv2.imwrite("{}/data/rsize/rs{}.jpeg".format(cwd, s), img=simage)
+
+os.mkdir("data/translate")
+height, width = image.shape[:2]
+for t in range(1, 5):
+    theight, twidth = height / t, width / t
+    T = np.float32([[1, 0, twidth], [0, 1, theight]])
+    img_translation = cv2.warpAffine(image, T, (width, height))
+    cv2.imwrite("{}/data/translate/T{}.jpeg".format(cwd, T), img=img_translation)
