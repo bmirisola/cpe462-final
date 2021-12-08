@@ -50,5 +50,11 @@ for f in range(-1, 2):
     fimage = cv2.flip(image, f)
     cv2.imwrite("{}/data/flip/f{}.jpeg".format(cwd, f), img=fimage)
 
-cv2.imshow("flip", image)
-cv2.waitKey(0)
+# resizing the img
+os.mkdir("data/rsize")
+for s in range(1, 5):
+    width = int(image.shape[1] * 0.25 * s)
+    height = int(image.shape[0] * 0.25 * s)
+    dsize = (width, height)
+    simage = cv2.resize(image, dsize)
+    cv2.imwrite("{}/data/rsize/rs{}.jpeg".format(cwd, s), img=simage)
