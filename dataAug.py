@@ -43,7 +43,12 @@ os.mkdir("data/noise")
 for j in range(0, 4):
     cv2.imwrite("{}/data/noise/sp{}.jpeg".format(cwd, j), img=add_noise(image))
 
+image = cv2.imread("{}/saved_img.jpg".format(cwd))
+# flip the img in 3 diff ways
+os.mkdir("data/flip")
+for f in range(-1, 2):
+    fimage = cv2.flip(image, f)
+    cv2.imwrite("{}/data/flip/f{}.jpeg".format(cwd, f), img=fimage)
 
-# cv2.imwrite("salt-and-pepper.jpeg", img=add_noise(image))
-# cv2.imshow("noise", add_noise(image))
-# cv2.waitKey(0)
+cv2.imshow("flip", image)
+cv2.waitKey(0)
