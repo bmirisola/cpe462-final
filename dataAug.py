@@ -6,13 +6,27 @@ import numpy as np
 
 
 # making an overall data dir and getting to the main img
-os.mkdir("data")
+
+# I guarantee Riya didn't pull and is gonna text me saying "Benjamin it doesn't work!" after she pushes
+# Prove me wrong
+# When you read this please remember to always pull before you start working on a project.
+# It's a big time saver trust me (;
+try:
+    os.mkdir("data")
+    os.mkdir("data/rotate")
+    os.mkdir("data/noise")
+    os.mkdir("data/flip")
+    os.mkdir("data/rsize")
+    os.mkdir("data/translate")
+    os.mkdir("data/crop")
+
+except FileExistsError:
+    pass
 cwd = os.getcwd()
 key = cv2.waitKey(1)
 image = cv2.imread("{}/saved_img.jpg".format(cwd))
 
 # rotating the img
-os.mkdir("data/rotate")
 
 
 def rotate(image):
@@ -41,20 +55,17 @@ def add_noise(img):
     return img
 
 
-os.mkdir("data/noise")
 for j in range(0, 4):
     cv2.imwrite("{}/data/noise/sp{}.jpeg".format(cwd, j), img=add_noise(image))
 
 image = cv2.imread("{}/saved_img.jpg".format(cwd))
 
 # flip the img in 3 diff ways
-os.mkdir("data/flip")
 for f in range(-1, 2):
     fimage = cv2.flip(image, f)
     cv2.imwrite("{}/data/flip/f{}.jpeg".format(cwd, f), img=fimage)
 
 # resizing the img
-os.mkdir("data/rsize")
 for s in range(1, 5):
     width = int(image.shape[1] * 0.25 * s)
     height = int(image.shape[0] * 0.25 * s)
@@ -63,7 +74,6 @@ for s in range(1, 5):
     cv2.imwrite("{}/data/rsize/rs{}.jpeg".format(cwd, s), img=simage)
 
 # translating the img
-os.mkdir("data/translate")
 height, width = image.shape[:2]
 for t in range(1, 5):
     theight, twidth = height / t, width / t
@@ -72,7 +82,6 @@ for t in range(1, 5):
     cv2.imwrite("{}/data/translate/T{}.jpeg".format(cwd, T), img=img_translation)
 
 # Cropping an image
-os.mkdir("data/crop")
 for c in range(1, 5):
     cropped_image = image[100 * c : 200 * c, 20 * c : 300 * c]
     cv2.imwrite("{}/data/crop/c{}.jpg".format(cwd, c), cropped_image)
