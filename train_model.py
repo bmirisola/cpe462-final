@@ -1,3 +1,4 @@
+import os.path
 import keras
 from tensorflow.keras.applications import ResNet50
 from tensorflow.keras.optimizers import Adam
@@ -6,7 +7,8 @@ import tensorflow as tf
 # Just train model for one person at the moment. Add a class for each person.
 # This should be automated in the future.
 num_of_classes = 1
-dataset = "data"
+dataset = os.path.join(os.getcwd(),"data")
+print(dataset)
 validation_ratio = .15
 batch_size = 4
 
