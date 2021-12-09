@@ -1,4 +1,4 @@
-#This program detects faces and draws a boxes around them
+#This program uses a pretrained model to detect faces and draws a boxes around them
 #Cropped images of the detected face can be saved
 #This code is based off the following reference: https://www.pyimagesearch.com/2021/04/05/opencv-face-detection-with-haar-cascades/
 
@@ -10,7 +10,7 @@ import time
 import cv2
 import os
 
-picCount = 1
+picCount = 1#counter for images
 path_img = os.path.abspath("saved_img.jpg")
 cwd = os.getcwd()
 #construct the argument parser and parse the argument
@@ -42,9 +42,10 @@ while True:
 	cv2.imshow("Frame - Press s to capture/save image and q to quit", frame)#Show frame
 	key = cv2.waitKey(1) & 0xFF #key listener
 	if key == ord("s"):
-		fname = "{}/{}/saved_img_"+str(picCount)+".jpg"
+		#fname = "{}/{}/saved_img_"+str(picCount)+".jpg" #create unique name for image using counter
+		fname = "{}/{}/saved_img.jpg" #create name for image(not unique and will overwrite)
 		cv2.imwrite(filename=fname.format(cwd,"data/person"), img=crop)
-		picCount+=1
+		#picCount+=1 #iterate counter
 		print("Image Saved")# if the `s` key was pressed, a cropped image of the detected face will be saved
 	elif key == ord("q"):
 		print("Quitting")# if the `q` key was pressed, break from the loop
