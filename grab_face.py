@@ -9,7 +9,7 @@ import imutils
 import cv2
 import os
 
-picCount = 1 #counter for images
+picCount = 0 #counter for images
 # load the haar cascade face detector from
 print("[INFO] loading face detector...")
 detector = cv2.CascadeClassifier("model/haarcascade_frontalface_default.xml")
@@ -18,6 +18,7 @@ print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
 cwd = os.getcwd()
 
+print("Frame - Press s to capture/save image and q to quit")
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the video stream, resize it, and convert it
@@ -36,16 +37,31 @@ while True:
 	cv2.imshow("Frame - Press s to capture/save image and q to quit", frame)#Show frame
 	key = cv2.waitKey(1) & 0xFF #key listener
 	if key == ord("s"):
-		try:
-			os.mkdir("data")
-			os.mkdir("data/person")
-		except FileExistsError:
-			pass
-		#fname = "{}/{}/saved_img_"+str(picCount)+".jpg" #create unique name for image using counter
-		fname = "{}/{}/saved_img.jpg" #create name for image(not unique and will overwrite)
-		cv2.imwrite(filename=fname.format(cwd,"data/person"), img=crop)
-		#picCount+=1 #iterate counter
-		print("Image Saved")# if the `s` key was pressed, a cropped image of the detected face will be saved
+		if(picCount == 0):
+			try:
+				os.mkdir("data")
+				os.mkdir("data/person")
+			except FileExistsError:
+				pass
+			fname = "{}/{}/saved_img.jpg" #create name for image(not unique and will overwrite)
+			cv2.imwrite(filename=fname.format(cwd,"data/person"), img=crop)
+			picCount+=1 #iterate counter
+			print("Image Saved")# if the `s` key was pressed, a cropped image of the detected face will be saved
+			print("Please take AT LEAST 5 more images in different positions for program to work")
+			print("Just moving your head to different (x,y) pixels is fine")
+		elif (picCount >=1):
+			try:
+				os.mkdir("verify")
+				os.mkdir("verify/person")
+			except FileExistsError:
+				pass
+			fname = "{}/{}/saved_img_"+str(picCount)+".jpg" #create unique name for image using counter
+			cv2.imwrite(filename=fname.format(cwd, "verify/person"), img=crop)
+			print("Image Saved")  # if the `s` key was pressed, a cropped image of the detected face will be saved
+			print("Please take at least {} more pictures for rest of program to work".format(5 - picCount))
+			picCount += 1  # iterate counter
+			print("Just moving your head to different (x,y) pixels is fine")
+
 	elif key == ord("q"):
 		print("Quitting")# if the `q` key was pressed, break from the loop
 		break
