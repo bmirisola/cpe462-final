@@ -6,7 +6,6 @@
 from imutils.video import VideoStream
 import argparse
 import imutils
-import time
 import cv2
 import os
 
@@ -23,7 +22,7 @@ detector = cv2.CascadeClassifier(args["cascade"])
 # initialize the video stream and allow the camera sensor to warm up
 print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
-time.sleep(2.0)
+
 # loop over the frames from the video stream
 while True:
 	# grab the frame from the video stream, resize it, and convert it
@@ -42,6 +41,11 @@ while True:
 	cv2.imshow("Frame - Press s to capture/save image and q to quit", frame)#Show frame
 	key = cv2.waitKey(1) & 0xFF #key listener
 	if key == ord("s"):
+		try:
+			os.mkdir("data")
+			os.mkdir("data/person")
+		except FileExistsError:
+			pass
 		#fname = "{}/{}/saved_img_"+str(picCount)+".jpg" #create unique name for image using counter
 		fname = "{}/{}/saved_img.jpg" #create name for image(not unique and will overwrite)
 		cv2.imwrite(filename=fname.format(cwd,"data/person"), img=crop)
