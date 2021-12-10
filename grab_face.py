@@ -4,24 +4,19 @@
 
 #imports
 from imutils.video import VideoStream
-import argparse
+
 import imutils
 import cv2
 import os
 
-picCount = 1#counter for images
-path_img = os.path.abspath("saved_img.jpg")
-cwd = os.getcwd()
-#construct the argument parser and parse the argument
-ap = argparse.ArgumentParser()
-ap.add_argument("-c", "--cascade", type=str,default="haarcascade_frontalface_default.xml")
-args = vars(ap.parse_args())
+picCount = 1 #counter for images
 # load the haar cascade face detector from
 print("[INFO] loading face detector...")
-detector = cv2.CascadeClassifier(args["cascade"])
+detector = cv2.CascadeClassifier("model/haarcascade_frontalface_default.xml")
 # initialize the video stream and allow the camera sensor to warm up
 print("[INFO] starting video stream...")
 vs = VideoStream(src=0).start()
+cwd = os.getcwd()
 
 # loop over the frames from the video stream
 while True:
