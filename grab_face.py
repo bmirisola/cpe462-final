@@ -20,6 +20,15 @@ cwd = os.getcwd()
 
 print("Frame - Press s to capture/save image and q to quit")
 # loop over the frames from the video stream
+
+try:
+	os.mkdir("data")
+	os.mkdir("data/person")
+	os.mkdir("verify")
+	os.mkdir("verify/person")
+except FileExistsError:
+	pass
+
 while True:
 	# grab the frame from the video stream, resize it, and convert it
 	# to grayscale
@@ -34,15 +43,10 @@ while True:
 		cv2.rectangle(frame, (x-10, y-10), (x + w+10, y + h+10), (0, 255, 0), 3)
 		crop = frame[y-10:y+h+10, x-10:x+w+10]#crop face
 	# show the output frame
-	cv2.imshow("Frame - Press s to capture/save image and q to quit", frame)#Show frame
+	cv2.imshow("Frame - Press s to capture/save image and q to quit", frame) #Show frame
 	key = cv2.waitKey(1) & 0xFF #key listener
 	if key == ord("s"):
 		if(picCount == 0):
-			try:
-				os.mkdir("data")
-				os.mkdir("data/person")
-			except FileExistsError:
-				pass
 			fname = "{}/{}/saved_img.jpg" #create name for image(not unique and will overwrite)
 			cv2.imwrite(filename=fname.format(cwd,"data/person"), img=crop)
 			picCount+=1 #iterate counter
@@ -50,11 +54,6 @@ while True:
 			print("Please take AT LEAST 5 more images in different positions for program to work")
 			print("Just moving your head to different (x,y) pixels is fine")
 		elif (picCount >=1):
-			try:
-				os.mkdir("verify")
-				os.mkdir("verify/person")
-			except FileExistsError:
-				pass
 			fname = "{}/{}/saved_img_"+str(picCount)+".jpg" #create unique name for image using counter
 			cv2.imwrite(filename=fname.format(cwd, "verify/person"), img=crop)
 			print("Image Saved")  # if the `s` key was pressed, a cropped image of the detected face will be saved
