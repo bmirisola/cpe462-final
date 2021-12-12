@@ -6,8 +6,6 @@ import numpy as np
 
 
 # making an overall data dir and getting to the main img
-# When you read this please remember to always pull before you start working on a project.
-# It's a big time saver trust me (;
 
 key = cv2.waitKey(1)
 path = os.path.abspath("data/person")
@@ -42,6 +40,7 @@ def add_noise(img):
 for j in range(0, 4):
     cv2.imwrite("{}/sp{}.jpeg".format(path, j), img=add_noise(image))
 
+image = cv2.imread("{}/saved_img.jpg".format(path))
 # flip the img in 3 diff ways
 for f in range(-1, 2):
     fimage = cv2.flip(image, f)
@@ -65,5 +64,26 @@ for t in range(1, 5):
 
 # Cropping an image
 for c in range(1, 5):
-    cropped_image = image[100 * c : 200 * c, 20 * c : 300 * c]
+    cropped_image = image[20 * c : 90 * c, 20 * c : 70 * c]
     cv2.imwrite("{}/c{}.jpg".format(path, c), cropped_image)
+
+
+for i in range(0, 10):
+    brightness = int((30 * i + 20))
+    if brightness > 0:
+        shadow = brightness
+        max = 255
+    else:
+        shadow = 0
+        max = 255 + brightness
+    al_pha = (max - shadow) / 255
+    ga_mma = shadow
+    cal = cv2.addWeighted(image, al_pha, image, 0, ga_mma)
+    cv2.imwrite("{}/b{}.jpeg".format(path, i), img=cal)
+
+for i in range(1, 10):
+    contrast = int((10 * i + 7))
+    Alpha = float(131 * (contrast + 127)) / (127 * (131 - contrast))
+    Gamma = 127 * (1 - Alpha)
+    cal = cv2.addWeighted(image, Alpha, image, 0, Gamma)
+    cv2.imwrite("{}/con{}.jpeg".format(path, i), img=cal)
