@@ -37,7 +37,7 @@ def add_noise(img):
     return img
 
 
-for j in range(0, 20):
+for j in range(0, 5):
     cv2.imwrite("{}/sp{}.jpeg".format(path, j), img=add_noise(image))
 
 image = cv2.imread("{}/saved_img.jpg".format(path))
@@ -63,9 +63,12 @@ for t in range(4, 31):
     cv2.imwrite("{}/T{}.jpeg".format(path, t), img=img_translation)
 
 # Cropping an image
+'''
 for c in range(1, 10):
     cropped_image = image[5 * c : 30 * c, 1 * c : 30 * c]
     cv2.imwrite("{}/cr{}.jpg".format(path, c), cropped_image)
+'''
+
 
 # changing brightness
 for i in range(0, 20):
