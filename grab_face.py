@@ -23,8 +23,21 @@ print("Frame - Press s to capture/save image and q to quit")
 
 try:
 	os.mkdir("data")
+
+except FileExistsError:
+	pass
+
+try:
 	os.mkdir("data/person")
+except FileExistsError:
+	pass
+
+try:
 	os.mkdir("verify")
+except FileExistsError:
+	pass
+
+try:
 	os.mkdir("verify/person")
 except FileExistsError:
 	pass
@@ -38,28 +51,20 @@ while True:
 	# perform face detection
 	rects = detector.detectMultiScale(gray, scaleFactor=1.05,minNeighbors=5, minSize=(30, 30),flags=cv2.CASCADE_SCALE_IMAGE)
     # loop over the bounding boxes
+	original_frame = vs.read()
 	for (x, y, w, h) in rects:
 		# draw the face bounding box on the image
 		cv2.rectangle(frame, (x-10, y-10), (x + w+10, y + h+10), (0, 255, 0), 3)
-		crop = frame[y-10:y+h+10, x-10:x+w+10]#crop face
+		crop = original_frame[y-10:y+h+10, x-10:x+w+10]#crop face
 	# show the output frame
 	cv2.imshow("Frame - Press s to capture/save image and q to quit", frame) #Show frame
 	key = cv2.waitKey(1) & 0xFF #key listener
 	if key == ord("s"):
-		if(picCount == 0):
-			fname = "{}/{}/saved_img.jpg" #create name for image(not unique and will overwrite)
-			cv2.imwrite(filename=fname.format(cwd,"data/person"), img=crop)
-			picCount+=1 #iterate counter
-			print("Image Saved")# if the `s` key was pressed, a cropped image of the detected face will be saved
-			print("Please take AT LEAST 5 more images in different positions for program to work")
-			print("Just moving your head to different (x,y) pixels is fine")
-		elif (picCount >=1):
-			fname = "{}/{}/saved_img_"+str(picCount)+".jpg" #create unique name for image using counter
-			cv2.imwrite(filename=fname.format(cwd, "verify/person"), img=crop)
-			print("Image Saved")  # if the `s` key was pressed, a cropped image of the detected face will be saved
-			print("Please take at least {} more pictures for rest of program to work".format(5 - picCount))
-			picCount += 1  # iterate counter
-			print("Just moving your head to different (x,y) pixels is fine")
+		fname = "{}/{}/saved_img.jpg" #create name for image(not unique and will overwrite)
+		cv2.imwrite(filename=fname.format(cwd,"data/person"), img=crop)
+		print("Image Saved")# if the `s` key was pressed, a cropped image of the detected face will be saved
+		print("Running data augmentations")
+		break
 
 	elif key == ord("q"):
 		print("Quitting")# if the `q` key was pressed, break from the loop
