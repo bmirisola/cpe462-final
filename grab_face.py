@@ -19,6 +19,7 @@ vs = VideoStream(src=0).start()
 cwd = os.getcwd()
 
 print("Frame - Press s to capture/save image and q to quit")
+print("Please make sure box is around face before saving image!!!")
 # loop over the frames from the video stream
 
 try:
