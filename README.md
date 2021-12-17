@@ -10,5 +10,5 @@ Platform was tested on Windows, MacOS, and Debian (Ubuntu specifically)
 
 #How to Run:
 Please have a camera connected to computer  
-Run with Python3 main.py  
+Run with python3 main.py in terminal
 Follow terminal instructions  
