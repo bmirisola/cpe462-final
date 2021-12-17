@@ -32,16 +32,6 @@ try:
 except FileExistsError:
 	pass
 
-try:
-	os.mkdir("verify")
-except FileExistsError:
-	pass
-
-try:
-	os.mkdir("verify/person")
-except FileExistsError:
-	pass
-
 while True:
 	# grab the frame from the video stream, resize it, and convert it
 	# to grayscale
