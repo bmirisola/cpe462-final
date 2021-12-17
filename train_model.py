@@ -1,3 +1,8 @@
+'''
+All model code was based off tutorial at: https://gitlab.com/Winston-90/me_not_me_detector/-/tree/main
+'''
+
+
 import os.path
 import keras
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
@@ -42,7 +47,7 @@ with tf.device('/CPU:0'):
     face_classifier = keras.models.Model(inputs=base_model.input, outputs=output, name='ResNet50')
 
     # ModelCheckpoint to save model in case of interrupting the learning process
-    checkpoint = ModelCheckpoint("models/face_classifier.h5",
+    checkpoint = ModelCheckpoint("model/face_classifier.h5",
                                  monitor="val_loss",
                                  mode="min",
                                  save_best_only=True,
@@ -51,7 +56,7 @@ with tf.device('/CPU:0'):
     # EarlyStopping to find best model with a large number of epochs
     earlystop = EarlyStopping(monitor='val_loss',
                               restore_best_weights=True,
-                              patience=5,  # number of epochs with no improvement after which training will be stopped
+                              patience=4,  # number of epochs with no improvement after which training will be stopped
                               verbose=1)
 
     callbacks = [earlystop, checkpoint]
