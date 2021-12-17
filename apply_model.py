@@ -54,11 +54,12 @@ def get_extended_image(img, x, y, w, h, k=0.1):
         face_image = np.expand_dims(face_image, axis=0)
         return face_image
 
+name = input("Enter your name")
 print("\n" + "RUNNING MODEL")
 person_identifier_model = os.path.join("model/face_classifier.h5")
 person_identifier = keras.models.load_model(person_identifier_model)
 face_detector = cv2.CascadeClassifier("model/haarcascade_frontalface_default.xml")
-name = 'Benny'
+
 vs = VideoStream(src=0).start()
 while True:
     frame = vs.read()
