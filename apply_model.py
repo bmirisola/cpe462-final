@@ -1,3 +1,7 @@
+'''
+All model code was based off tutorial at: https://gitlab.com/Winston-90/me_not_me_detector/-/tree/main
+'''
+
 import os
 import cv2
 import keras.models
