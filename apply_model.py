@@ -5,6 +5,12 @@ import numpy as np
 from imutils.video import VideoStream
 import tensorflow as tf
 
+img_path = "data/person/saved_img.jpg"
+img = cv2.imread(img_path)
+input_shape = img.shape
+img_height = img.shape[0]
+img_width = img.shape[1]
+
 def get_extended_image(img, x, y, w, h, k=0.1):
     '''
     Function, that return cropped image from 'img'
@@ -22,29 +28,31 @@ def get_extended_image(img, x, y, w, h, k=0.1):
         k (float): The coefficient of expansion of the image
 
     Returns:
-        image (tensor with shape (1, 250, 250, 3))
+        image (tensor with shape (1, img_height, img_width, 3)
     '''
 
-    # The next code block checks that coordinates will be non-negative
-    # (in case if desired image is located in top left corner)
-    if x - k*w > 0:
-        start_x = int(x - k*w)
-    else:
-        start_x = x
-    if y - k*h > 0:
-        start_y = int(y - k*h)
-    else:
-        start_y = y
+    with tf.device('/CPU:0'):
 
-    end_x = int(x + (1 + k)*w)
-    end_y = int(y + (1 + k)*h)
+        # The next code block checks that coordinates will be non-negative
+        # (in case if desired image is located in top left corner)
+        if x - k*w > 0:
+            start_x = int(x - k*w)
+        else:
+            start_x = x
+        if y - k*h > 0:
+            start_y = int(y - k*h)
+        else:
+            start_y = y
 
-    face_image = img[start_y:end_y,
-                     start_x:end_x]
-    face_image = tf.image.resize(face_image, [250, 250])
-    # shape from (250, 250, 3) to (1, 250, 250, 3)
-    face_image = np.expand_dims(face_image, axis=0)
-    return face_image
+        end_x = int(x + (1 + k)*w)
+        end_y = int(y + (1 + k)*h)
+
+        face_image = img[start_y:end_y,
+                         start_x:end_x]
+        face_image = tf.image.resize(face_image, [img_height,img_width])
+        # shape from (img_height, img_width, 3) to (1, img_height, img_width, 3)
+        face_image = np.expand_dims(face_image, axis=0)
+        return face_image
 
 print("\n" + "RUNNING MODEL")
 person_identifier_model = os.path.join("model/face_classifier.h5")
@@ -54,16 +62,16 @@ name = 'Benny'
 vs = VideoStream(src=0).start()
 while True:
     frame = vs.read()
-    cv2.imshow("hi", frame)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     rects = face_detector.detectMultiScale(gray, scaleFactor=1.05, minNeighbors=5, minSize=(30, 30),flags=cv2.CASCADE_SCALE_IMAGE)
     for (x, y, w, h) in rects:
-        face_image = get_extended_image(frame, x, y, w, h, 0.5)
-        result = person_identifier.predict(frame)
-        confidence = np.array(result[0]).max(axis=0)
+        with tf.device('/CPU:0'):
+            face_image = get_extended_image(frame, x, y, w, h, 0.5)
+            result = person_identifier.predict(face_image)
+            confidence = np.array(result[0]).max(axis=0)
         cv2.rectangle(frame, (x - 10, y - 10), (x + w + 10, y + h + 10), (0, 255, 0), 3)
         cv2.putText(frame, "{:6} - {:.2f}%".format(name,confidence * 100), (x, y), cv2.FONT_HERSHEY_PLAIN,2,(255,0,0),2)  # thickness in px
-
+    cv2.imshow("Prediction with Confidence", frame)
 
     key = cv2.waitKey(1) & 0xFF  # key listener
     if key == ord("q"):
